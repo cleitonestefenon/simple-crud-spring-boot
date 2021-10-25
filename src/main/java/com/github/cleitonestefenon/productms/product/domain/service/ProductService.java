@@ -5,7 +5,6 @@ import com.github.cleitonestefenon.productms.product.domain.repository.ProductRe
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +18,11 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product save(Product product) {
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    public Product updateProduct(Product product) {
         return productRepository.save(product);
     }
 
@@ -31,7 +34,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public List<Product> searchProducts(String param, BigDecimal minPrice, BigDecimal maxPrice){
+    public List<Product> searchProducts(String param, BigDecimal minPrice, BigDecimal maxPrice) {
         return productRepository.searchByParams(param, minPrice, maxPrice);
     }
 

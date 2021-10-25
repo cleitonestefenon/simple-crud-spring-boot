@@ -32,19 +32,19 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto productDto) {
-        Product product = productService.save(productConverter.createProduct(productDto));
+        Product product = productService.createProduct(productConverter.createProduct(productDto));
         return new ResponseEntity<>(productConverter.createProductDto(product), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editProduct(@Valid @RequestBody ProductDto productDto, @PathVariable UUID id) {
+    public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable UUID id) {
         Optional<Product> product = productService.findById(id);
         if (!product.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         productDto.setId(id);
         return new ResponseEntity<>(
-                productService.save(productConverter.updateProduct(productDto, product.get())),
+                productService.updateProduct(productConverter.updateProduct(productDto, product.get())),
                 HttpStatus.OK
         );
     }
@@ -59,7 +59,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProducts() {
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductDto> products = productService.getAllProducts()
                 .stream()
                 .map(productConverter::createProductDto)
@@ -68,9 +68,10 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchProducts(@RequestParam(value = "q", required = false) String param,
+    public ResponseEntity<?> searchProducts(@RequestParam(value = "q", required = false, defaultValue = "null") String param,
                                             @RequestParam(value = "min_price", required = false) BigDecimal minPrice,
                                             @RequestParam(value = "max_price", required = false) BigDecimal maxPrice) {
+
         List<Product> products = productService.searchProducts(param, minPrice, maxPrice);
 
         return new ResponseEntity<>(products, HttpStatus.OK);
