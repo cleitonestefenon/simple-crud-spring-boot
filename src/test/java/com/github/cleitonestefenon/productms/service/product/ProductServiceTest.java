@@ -1,6 +1,7 @@
 package com.github.cleitonestefenon.productms.service.product;
 
 import com.github.cleitonestefenon.productms.product.domain.model.Product;
+import com.github.cleitonestefenon.productms.product.domain.repository.ProductCustomRepository;
 import com.github.cleitonestefenon.productms.product.domain.repository.ProductRepository;
 import com.github.cleitonestefenon.productms.product.domain.service.ProductService;
 import org.junit.jupiter.api.Assertions;
@@ -21,14 +22,14 @@ import static org.mockito.Mockito.*;
 public class ProductServiceTest {
     private ProductService subject;
     private ProductRepository productRepository;
+    private ProductCustomRepository productCustomRepository;
 
 
     @BeforeEach
     public void setUp() {
         productRepository = Mockito.mock(ProductRepository.class);
-        subject = new ProductService(productRepository);
+        subject = new ProductService(productRepository, productCustomRepository);
     }
-
 
     @Test
     public void shouldCreateOneProductSuccesfully() {

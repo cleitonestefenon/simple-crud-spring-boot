@@ -1,6 +1,7 @@
 package com.github.cleitonestefenon.productms.product.interfaces.rest;
 
 import com.github.cleitonestefenon.productms.product.domain.model.Product;
+import com.github.cleitonestefenon.productms.product.domain.repository.ProductCustomRepository;
 import com.github.cleitonestefenon.productms.product.domain.service.ProductService;
 import com.github.cleitonestefenon.productms.product.interfaces.convert.ProductConverter;
 import com.github.cleitonestefenon.productms.product.interfaces.dto.ProductDto;
@@ -24,10 +25,13 @@ public class ProductController {
     private final ProductConverter productConverter = Mappers.getMapper(ProductConverter.class);
 
     private final ProductService productService;
+    private final ProductCustomRepository productCustomRepository;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService,
+                             ProductCustomRepository productCustomRepository) {
         this.productService = productService;
+        this.productCustomRepository = productCustomRepository;
     }
 
     @PostMapping
@@ -68,11 +72,11 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchProducts(@RequestParam(value = "q", required = false, defaultValue = "null") String param,
+    public ResponseEntity<?> searchProducts(@RequestParam(value = "q", required = false) String param,
                                             @RequestParam(value = "min_price", required = false) BigDecimal minPrice,
                                             @RequestParam(value = "max_price", required = false) BigDecimal maxPrice) {
 
-        List<Product> products = productService.searchProducts(param, minPrice, maxPrice);
+        List<Product> products = productCustomRepository.searchProduct(param, minPrice, maxPrice);
 
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

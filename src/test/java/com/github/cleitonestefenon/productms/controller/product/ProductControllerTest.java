@@ -1,6 +1,7 @@
 package com.github.cleitonestefenon.productms.controller.product;
 
 import com.github.cleitonestefenon.productms.product.domain.model.Product;
+import com.github.cleitonestefenon.productms.product.domain.repository.ProductCustomRepository;
 import com.github.cleitonestefenon.productms.product.domain.service.ProductService;
 import com.github.cleitonestefenon.productms.product.interfaces.dto.ProductDto;
 import com.github.cleitonestefenon.productms.product.interfaces.rest.ProductController;
@@ -30,11 +31,12 @@ public class ProductControllerTest {
 
     private ProductController subject;
     private ProductService productService;
+    private ProductCustomRepository productCustomRepository;
 
     @BeforeEach
     public void setUp() {
         productService = Mockito.mock(ProductService.class);
-        subject = new ProductController(productService);
+        subject = new ProductController(productService, productCustomRepository);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
     }
 
