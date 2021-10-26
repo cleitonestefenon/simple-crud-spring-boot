@@ -22,9 +22,9 @@ public class ProductCustomRepository {
         String condicao = "where ";
 
         if (param != null) {
-            stringQuery += condicao + "p.name like CONCAT('%',:param,'%') or " +
-                    "p.description like CONCAT('%',:param,'%') ";
-            condicao = "or ";
+            stringQuery += condicao + "(LOWER(p.name) like CONCAT('%',:param,'%') or " +
+                    "LOWER(p.description) like CONCAT('%',:param,'%')) ";
+            condicao = "and ";
         }
 
         if (minPrice != null && maxPrice != null) {
@@ -42,7 +42,7 @@ public class ProductCustomRepository {
         var query = entityManager.createQuery(stringQuery, Product.class);
 
         if (param != null) {
-            query.setParameter("param", param);
+            query.setParameter("param", param.toLowerCase());
         }
 
         if (minPrice != null && maxPrice != null) {
@@ -50,7 +50,7 @@ public class ProductCustomRepository {
             query.setParameter("maxPrice", maxPrice);
         } else {
             if (minPrice != null) {
-                query.setParameter("minPrice", minPrice);
+                query.setParameter("minPrice", BigDecimal.valueOf(minPrice.doubleValue()));
             }
 
             if (maxPrice != null) {

@@ -1,7 +1,6 @@
 package com.github.cleitonestefenon.productms.controller.product;
 
 import com.github.cleitonestefenon.productms.product.domain.model.Product;
-import com.github.cleitonestefenon.productms.product.interfaces.dto.ProductDto;
 
 import java.math.BigDecimal;
 
